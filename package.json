@@ -1,13 +1,13 @@
 {
-  "name": "root",
-  "description": "Secure boilerplate for Electron app based on Vite",
-  "version": "3.1.0",
+  "name": "rpa-client",
+  "description": "RPA",
+  "version": "3.1.1",
   "private": true,
   "type": "module",
   "author": {
-    "email": "kozackunisoft@gmail.com",
-    "name": "Alex Kozack",
-    "url": "https://kozack.me"
+    "email": "app@hookfunc.com",
+    "name": "hookfunc",
+    "url": "https://hookfunc.com"
   },
   "main": "packages/entry-point.mjs",
   "workspaces": [

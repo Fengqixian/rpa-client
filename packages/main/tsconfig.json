@@ -9,13 +9,10 @@
     "strict": true,
     "isolatedModules": true,
     "types": ["node"],
-    "baseUrl": ".",
     "paths": {
       "@app/preload": ["../preload"],
       "@app/renderer": ["../renderer"]
-    },
-    /* 忽略弃用警告 */
-    "ignoreDeprecations": "6.0"
+    }
     
   },
   "include": ["src/**/*.ts", "../../types/**/*.d.ts"],

@@ -17,7 +17,7 @@ mode.value = "dark"
                 <!-- 左侧内容 -->
                 <div class="flex items-center space-x-2">
                     <span class="flex size-2 rounded-full bg-green-500"></span>
-                    <span>连接成功</span>
+                    <!-- <span>连接成功</span> -->
                 </div>
             </div>
             <div class="col-span-1 text-center">

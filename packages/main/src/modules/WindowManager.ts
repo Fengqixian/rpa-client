@@ -23,7 +23,9 @@ class WindowManager implements AppModule {
 
   async createWindow(): Promise<BrowserWindow> {
     const browserWindow = new BrowserWindow({
-      show: false, // Use the 'ready-to-show' event to show the instantiated BrowserWindow.
+      autoHideMenuBar: true, // 自动隐藏菜单栏
+      movable: false,
+      frame: false,
       webPreferences: {
         nodeIntegration: false,
         contextIsolation: true,
@@ -33,11 +35,13 @@ class WindowManager implements AppModule {
       },
     });
 
+    browserWindow.maximize();
     if (this.#renderer instanceof URL) {
       await browserWindow.loadURL(this.#renderer.href);
     } else {
       await browserWindow.loadFile(this.#renderer.path);
     }
+
 
     return browserWindow;
   }

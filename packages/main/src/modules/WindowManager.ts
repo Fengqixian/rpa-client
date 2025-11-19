@@ -1,6 +1,6 @@
 import type {AppModule} from '../AppModule.js';
 import {ModuleContext} from '../ModuleContext.js';
-import {BrowserWindow} from 'electron';
+import {app, BrowserWindow} from 'electron';
 import type {AppInitConfig} from '../AppInitConfig.js';
 
 class WindowManager implements AppModule {
@@ -12,6 +12,8 @@ class WindowManager implements AppModule {
     this.#preload = initConfig.preload;
     this.#renderer = initConfig.renderer;
     this.#openDevTools = openDevTools;
+    // 关键：添加 CDP 调试端口
+    app.commandLine.appendSwitch('remote-debugging-port', '9222');
   }
 
   async enable({app}: ModuleContext): Promise<void> {

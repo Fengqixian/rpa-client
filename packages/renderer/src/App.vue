@@ -4,6 +4,8 @@ import { useColorMode } from "@vueuse/core";
 import { Sparkles } from '@/components/ui/sparkles'
 
 const particlesColor = computed(() => (useColorMode().value === "dark" ? "#FFFFFF" : "#000000"));
+const mode = useColorMode()
+mode.value = "dark"
 </script>
 
 <template>

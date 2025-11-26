@@ -28,6 +28,7 @@ class WindowManager implements AppModule {
       autoHideMenuBar: true, // 自动隐藏菜单栏
       movable: false,
       frame: false,
+      show: false,
       webPreferences: {
         nodeIntegration: false,
         contextIsolation: true,

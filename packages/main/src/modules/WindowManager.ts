@@ -2,6 +2,9 @@ import type {AppModule} from '../AppModule.js';
 import {ModuleContext} from '../ModuleContext.js';
 import {app, BrowserWindow} from 'electron';
 import type {AppInitConfig} from '../AppInitConfig.js';
+import path from 'path';
+import { spawn } from 'child_process';
+import { fileURLToPath } from 'url';
 
 class WindowManager implements AppModule {
   readonly #preload: {path: string};
@@ -17,10 +20,34 @@ class WindowManager implements AppModule {
   }
 
   async enable({app}: ModuleContext): Promise<void> {
-    await app.whenReady();
+    // 👇 手动构建 __dirname
+    const __filename = fileURLToPath(import.meta.url);
+    const __dirname = path.dirname(__filename);
+    
+    let child: any = null;
+    await app.whenReady().then(() => {
+      const exePath =
+        process.env.NODE_ENV === 'development'
+          ? path.join(__dirname, '../../subprocess/xhs-rpa.exe') // dev 路径
+          : path.join(process.resourcesPath, 'subprocess/xhs-rpa.exe'); // 打包后路径
+
+      child = spawn(exePath, [], {
+        stdio: 'inherit',
+        windowsHide: false,
+      });
+
+      child.on('exit', (code:any) => {
+        console.log('子进程退出，代码:', code);
+      });
+    });
     await this.restoreOrCreateWindow(true);
     app.on('second-instance', () => this.restoreOrCreateWindow(true));
     app.on('activate', () => this.restoreOrCreateWindow(true));
+    app.on('before-quit', () => {
+      if (child) {
+        child.kill();
+      }
+    });
   }
 
   async createWindow(): Promise<BrowserWindow> {
@@ -44,7 +71,6 @@ class WindowManager implements AppModule {
     } else {
       await browserWindow.loadFile(this.#renderer.path);
     }
-
 
     return browserWindow;
   }

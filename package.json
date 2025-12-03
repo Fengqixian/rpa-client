@@ -38,5 +38,14 @@
   },
   "dependencies": {
     "@app/main": "*"
-  }
+  },
+  "build": {
+  "extraResources": [
+    {
+      "from": "packages/subprocess",
+      "to": "subprocess",
+      "filter": ["**/*"]
+    }
+  ]
+}
 }

@@ -15,9 +15,9 @@ mode.value = "dark"
         <header class="grid grid-cols-3 p-16">
             <div class="col-span-1">
                 <!-- 左侧内容 -->
-                <!-- <div class="flex items-center space-x-2">
+                <div class="flex items-center space-x-2">
                     <span class="flex size-2 rounded-full bg-green-500"></span>
-                </div> -->
+                </div>
             </div>
             <div class="col-span-1 text-center">
                 <!-- 中间内容 -->

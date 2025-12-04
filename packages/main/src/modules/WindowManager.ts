@@ -1,17 +1,17 @@
-import type {AppModule} from '../AppModule.js';
-import {ModuleContext} from '../ModuleContext.js';
-import {app, BrowserWindow} from 'electron';
-import type {AppInitConfig} from '../AppInitConfig.js';
+import type { AppModule } from '../AppModule.js';
+import { ModuleContext } from '../ModuleContext.js';
+import { app, BrowserWindow } from 'electron';
+import type { AppInitConfig } from '../AppInitConfig.js';
 import path from 'path';
 import { spawn } from 'child_process';
 import { fileURLToPath } from 'url';
 
 class WindowManager implements AppModule {
-  readonly #preload: {path: string};
-  readonly #renderer: {path: string} | URL;
+  readonly #preload: { path: string };
+  readonly #renderer: { path: string } | URL;
   readonly #openDevTools;
 
-  constructor({initConfig, openDevTools = false}: {initConfig: AppInitConfig, openDevTools?: boolean}) {
+  constructor({ initConfig, openDevTools = false }: { initConfig: AppInitConfig, openDevTools?: boolean }) {
     this.#preload = initConfig.preload;
     this.#renderer = initConfig.renderer;
     this.#openDevTools = openDevTools;
@@ -19,32 +19,38 @@ class WindowManager implements AppModule {
     app.commandLine.appendSwitch('remote-debugging-port', '9222');
   }
 
-  async enable({app}: ModuleContext): Promise<void> {
+  async enable({ app }: ModuleContext): Promise<void> {
     // 👇 手动构建 __dirname
     const __filename = fileURLToPath(import.meta.url);
     const __dirname = path.dirname(__filename);
-    
+
     let child: any = null;
+
     await app.whenReady().then(() => {
       const exePath =
         process.env.NODE_ENV === 'development'
-          ? path.join(__dirname, '../executables/xhs-rpa.exe') // dev 路径
-          : path.join(process.resourcesPath, 'xhs-rpa.exe'); // 打包后路径
+          // ✨ 优化后的 Dev 路径：从当前工作目录 (项目根目录) 开始查找
+          ? path.join(process.cwd(), '/packages/executables/xhs-rpa.exe')
+          // 生产路径保持不变
+          : path.join(process.resourcesPath, 'xhs-rpa.exe');
 
       child = spawn(exePath, [], {
+        // ⚠️ 建议修改：将 windowsHide 设为 true，以避免 Windows 弹出控制台窗口
         stdio: 'inherit',
-        windowsHide: false,
+        windowsHide: true,
       });
 
-      child.on('exit', (code:any) => {
+      child.on('exit', (code: any) => {
         console.log('子进程退出，代码:', code);
       });
     });
+
     await this.restoreOrCreateWindow(true);
     app.on('second-instance', () => this.restoreOrCreateWindow(true));
     app.on('activate', () => this.restoreOrCreateWindow(true));
     app.on('before-quit', () => {
       if (child) {
+        // 在 Electron 退出前，确保子进程被终止
         child.kill();
       }
     });

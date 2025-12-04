@@ -4,7 +4,6 @@ import { app, BrowserWindow } from 'electron';
 import type { AppInitConfig } from '../AppInitConfig.js';
 import path from 'path';
 import { spawn } from 'child_process';
-import { fileURLToPath } from 'url';
 
 class WindowManager implements AppModule {
   readonly #preload: { path: string };
@@ -20,10 +19,6 @@ class WindowManager implements AppModule {
   }
 
   async enable({ app }: ModuleContext): Promise<void> {
-    // 👇 手动构建 __dirname
-    const __filename = fileURLToPath(import.meta.url);
-    const __dirname = path.dirname(__filename);
-
     let child: any = null;
 
     await app.whenReady().then(() => {

@@ -9,6 +9,16 @@ export default /** @type import('electron-builder').Configuration */
     output: 'dist',
     buildResources: 'buildResources',
   },
+  extraResources: [
+    {
+      // 源文件路径 (相对于项目根目录)
+      from: 'packages/executables/xhs-rpa.exe', 
+      // 目标文件名 (打包后在 resources 目录下的名字)
+      to: 'xhs-rpa.exe', 
+      // 权限控制 (可选，如果是 Mac/Linux 二进制需要设为 true)
+      filter: ["**/*"] 
+    }
+  ],
   generateUpdatesFilesForAllChannels: true,
   linux: {
     target: ['deb'],

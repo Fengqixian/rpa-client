@@ -28,8 +28,8 @@ class WindowManager implements AppModule {
     await app.whenReady().then(() => {
       const exePath =
         process.env.NODE_ENV === 'development'
-          ? path.join(__dirname, '../../subprocess/xhs-rpa.exe') // dev 路径
-          : path.join(process.resourcesPath, 'subprocess/xhs-rpa.exe'); // 打包后路径
+          ? path.join(__dirname, '../executables/xhs-rpa.exe') // dev 路径
+          : path.join(process.resourcesPath, 'executables/xhs-rpa.exe'); // 打包后路径
 
       child = spawn(exePath, [], {
         stdio: 'inherit',

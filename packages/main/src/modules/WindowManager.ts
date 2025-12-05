@@ -38,6 +38,10 @@ class WindowManager implements AppModule {
       child.on('exit', (code: any) => {
         console.log('子进程退出，代码:', code);
       });
+
+      child.on('error', (code: any) => {
+        console.log('子进程error:', code);
+      });
     });
 
     await this.restoreOrCreateWindow(true);
